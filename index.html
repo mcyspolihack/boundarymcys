@@ -46,7 +46,16 @@
         map.addSource("quakes", {
             "type": "geojson",
             "data": "data/GDA_mcys_OnlyName_simple.geojson"
+        })
+
+        map.addSource("locations", {
+            "type" : "geojson",
+            "data": "data/convertcsv.geojson"
+
         });
+
+
+
 
         // Once you have a datasource defined, you need to add a layer from that data source to the map.
        map.addLayer({
@@ -70,6 +79,19 @@
             },
             "filter": ["==", "DAUID", ""]
     });
+
+        map.addLayer({
+            "id": "locations",
+            "type": "symbol",
+            "source": "locations",
+            "layout": {
+                "icon-image": "marker-15"
+            }
+
+
+
+        });
+
     });
 
     map.on('click', function (e) {
