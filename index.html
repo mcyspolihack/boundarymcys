@@ -54,17 +54,16 @@
 
         });
 
-
-
-
         // Once you have a datasource defined, you need to add a layer from that data source to the map.
-       map.addLayer({
+      map.addLayer({
             "id": "quakes", // An id for this layer
             "type": "fill", // As a point layer, we need style a symbol for each point.
             "source": "quakes", // The source layer we defined above
+
             "paint": {
-                'fill-opacity': 0.5,
-                'fill-outline-color': '#006378'
+                'fill-opacity': 0.6,
+                'fill-outline-color': '#006378',
+                'fill-color' : '#000000'
             }
         });
 
@@ -95,16 +94,8 @@
     });
 
     map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['quakes'] });
-        /*   var meow = document.getElementById('features').innerHTML  = JSON.stringify(features,["properties","DAUID","CDNAME","CSDNAME","CCSNAME","ERNAME","CMANAME","SSD_Region","YJ_Region","MCYSRegion"],2, "\t");
-        if (features.length) {
-            map.setFilter("route-hover", ["==", "DAUID", features[0].properties.DAUID]);
-        } else {
-            map.setFilter("route-hover", ["==", "DAUID", ""]);
-        }
 
-*/
-
+        var features = map.queryRenderedFeatures(e.point, { layers: ['quakes'] });
         var feature = features [0];
 
         if (features.length) {
@@ -112,7 +103,7 @@
         } else {
             map.setFilter("route-hover", ["==", "DAUID", ""]);
         }
-        var popup = new mapboxgl.Popup()
+        var popup = new mapboxgl.Popup({anchor: 'top'})
                 .setLngLat(map.unproject(e.point))
 
                 .setHTML('<ul>'+'<h3>'+ "MCYS Region " + feature.properties.MCYSRegion + '</h3>' +
@@ -129,11 +120,34 @@
                         +'</ul>')
                 .addTo(map);
 
+        var features2 = map.queryRenderedFeatures(e.point, { layers: ['locations'] });
+        var feature2 = features2[0];
+
+        var popup2 = new mapboxgl.Popup({anchor: 'bottom'})
+                .setLngLat(feature2.geometry.coordinates)
+                .setHTML('<h3>'+ "Funding Program: " + feature2.properties.FundProgram + '</h3>'+
+                        '<li>'+'<b>Organization name </b>' + feature2.properties.Org_Name + '</li>' +
+                        '<li>'+'<b>City Served </b>' + feature2.properties.City + '</li>' +
+                        '<li>'+'<b>Funding Year </b>' + feature2.properties.FY + '</li>'
+
+
+                )
+                .addTo(map)
+
+
+
        });
 
 
-    map.addControl(new mapboxgl.Geocoder());
+    map.on('mousemove', function (e) {
+        var features = map.queryRenderedFeatures(e.point, { layers: ['locations'] });
+        map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+    });
 
+
+
+
+    map.addControl(new mapboxgl.Geocoder());
 
 
 </script>
