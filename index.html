@@ -48,11 +48,7 @@
             "data": "data/GDA_mcys_OnlyName_simple.geojson"
         })
 
-        map.addSource("locations", {
-            "type" : "geojson",
-            "data": "data/convertcsv.geojson"
 
-        });
 
         // Once you have a datasource defined, you need to add a layer from that data source to the map.
       map.addLayer({
@@ -79,60 +75,56 @@
             "filter": ["==", "DAUID", ""]
     });
 
-        map.addLayer({
-            "id": "locations",
-            "type": "symbol",
-            "source": "locations",
-            "layout": {
-                "icon-image": "marker-15"
-            }
 
 
 
-        });
+
 
     });
 
-    map.on('click', function (e) {
-
-        var features = map.queryRenderedFeatures(e.point, { layers: ['quakes'] });
-        var feature = features [0];
-
-        if (features.length) {
-            map.setFilter("route-hover", ["==", "DAUID", features[0].properties.DAUID]);
-        } else {
-            map.setFilter("route-hover", ["==", "DAUID", ""]);
-        }
-        var popup = new mapboxgl.Popup({anchor: 'top'})
-                .setLngLat(map.unproject(e.point))
-
-                .setHTML('<ul>'+'<h3>'+ "MCYS Region " + feature.properties.MCYSRegion + '</h3>' +
-                        '<li>'+'<b>Dissemination Area </b>' + feature.properties.DAUID + '</li>' +
-                        '<li>'+'<b>Census Sub Division </b>' + feature.properties.CSDNAME + '</li>' +
-                        '<li>'+'<b>Census Consolidated Sub Division </b>' + feature.properties.CCSNAME + '</li>' +
-                        '<li>'+'<b>Census Division  </b>'+ feature.properties.CDNAME +'</li>'+
-                        '<li>'+'<b>Census Metropolitan Area </b>'+ feature.properties.CMANAME +'</li>'+
-                        '<li>'+'<b>Economic Region </b>'+feature.properties.ERNAME+'</li>'+
-                        '<li>'+'<b>MCYS Service Delivery Division Region </b>'+feature.properties.SDD_Region+'</li>'+
-                        '<li>'+'<b>Youth Justice Region </b>'+feature.properties.YJ_Region+'</li>'
 
 
-                        +'</ul>')
-                .addTo(map);
 
-        var features2 = map.queryRenderedFeatures(e.point, { layers: ['locations'] });
-        var feature2 = features2[0];
+       map.on('click', function (e) {
 
-        var popup2 = new mapboxgl.Popup({anchor: 'bottom'})
-                .setLngLat(feature2.geometry.coordinates)
-                .setHTML('<h3>'+ "Funding Program: " + feature2.properties.FundProgram + '</h3>'+
-                        '<li>'+'<b>Organization name </b>' + feature2.properties.Org_Name + '</li>' +
-                        '<li>'+'<b>City Served </b>' + feature2.properties.City + '</li>' +
-                        '<li>'+'<b>Funding Year </b>' + feature2.properties.FY + '</li>'
+           var features = map.queryRenderedFeatures(e.point, {layers: ['quakes']});
+           var feature = features [0];
+
+           if (features.length) {
+               map.setFilter("route-hover", ["==", "DAUID", features[0].properties.DAUID]);
+           } else {
+               map.setFilter("route-hover", ["==", "DAUID", ""]);
+           }
+           var popup = new mapboxgl.Popup({anchor: 'top'})
+                   .setLngLat(map.unproject(e.point))
+
+                   .setHTML('<ul>' + '<h3>' + "MCYS Region " + feature.properties.MCYSRegion + '</h3>' +
+                           '<li>' + '<b>Dissemination Area </b>' + feature.properties.DAUID + '</li>' +
+                           '<li>' + '<b>Census Sub Division </b>' + feature.properties.CSDNAME + '</li>' +
+                           '<li>' + '<b>Census Consolidated Sub Division </b>' + feature.properties.CCSNAME + '</li>' +
+                           '<li>' + '<b>Census Division  </b>' + feature.properties.CDNAME + '</li>' +
+                           '<li>' + '<b>Census Metropolitan Area </b>' + feature.properties.CMANAME + '</li>' +
+                           '<li>' + '<b>Economic Region </b>' + feature.properties.ERNAME + '</li>' +
+                           '<li>' + '<b>MCYS Service Delivery Division Region </b>' + feature.properties.SDD_Region + '</li>' +
+                           '<li>' + '<b>Youth Justice Region </b>' + feature.properties.YJ_Region + '</li>'
 
 
-                )
-                .addTo(map)
+                           + '</ul>')
+
+
+                   .addTo(map);
+
+          /* var features2 = map.queryRenderedFeatures(e.point, {layers: ['locations']});
+           var feature2 = features2[0];
+
+           var popup2 = new mapboxgl.Popup({anchor: 'bottom'})
+                   .setLngLat(feature2.geometry.coordinates)
+                   .setHTML('<h3>' + "Funding Program: " + feature2.properties.FundProgram + '</h3>' +
+                           '<li>' + '<b>Organization name </b>' + feature2.properties.Org_Name + '</li>' +
+                           '<li>' + '<b>City Served </b>' + feature2.properties.City + '</li>' +
+                           '<li>' + '<b>Funding Year </b>' + feature2.properties.FY + '</li>'
+                   )
+                   .addTo(map)*/
 
 
 
@@ -142,6 +134,25 @@
     map.on('mousemove', function (e) {
         var features = map.queryRenderedFeatures(e.point, { layers: ['locations'] });
         map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+
+        var features2 = map.queryRenderedFeatures(e.point, {layers: ['locations']});
+        var feature2 = features2[0];
+
+        /*
+
+        var popup2 = new mapboxgl.Popup({anchor: 'bottom'})
+                .setLngLat(feature2.geometry.coordinates)
+                .setHTML('<h3>' + "Funding Program: " + feature2.properties.FundProgram + '</h3>' +
+                        '<li>' + '<b>Organization name </b>' + feature2.properties.Org_Name + '</li>' +
+                        '<li>' + '<b>City Served </b>' + feature2.properties.City + '</li>' +
+                        '<li>' + '<b>Funding Year </b>' + feature2.properties.FY + '</li>'
+                )
+                .addTo(map)
+
+
+
+
+        */
     });
 
 
